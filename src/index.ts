@@ -1,17 +1,33 @@
 import * as express from 'express';
+import { sequelize } from '../models';
 
-class App {
-  public application: express.Application;
+const HOST: string = 'localhost';
+const PORT: number = 5000;
+const app = express();
 
-  constructor() {
-    this.application = express();
-  }
-}
-
-const app = new App().application;
+// Middleware Configuration
+app.use(express.json());
+app.use(
+  (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {}
+);
 
 app.get('/', (req: express.Request, res: express.Response) => {
   res.send('Start!');
 });
 
-app.listen(4000, () => console.log('Start!'));
+app.listen(5000, async () => {
+  console.log(`Server Listening on ${HOST}:${PORT}`);
+
+  await sequelize
+    .authenticate()
+    .then(async () => {
+      console.log('Connection Success.');
+    })
+    .catch((e: any) => {
+      console.log('TT : ', e);
+    });
+});
